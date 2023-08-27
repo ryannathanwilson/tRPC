@@ -147,3 +147,12 @@
 .loginButton:hover {
   background-color: rgb(255 255 255 / 0.2);
 }
+
+.input {
+  background-color: transparent;
+  outline: none;
+  border: none;
+  height: 3em;
+  font-size: 2em;
+  color: white;
+}

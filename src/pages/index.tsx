@@ -3,9 +3,22 @@ import Link from "next/link";
 
 import { api } from "~/utils/api";
 import styles from "./index.module.css";
+import { type FormEvent, useState } from "react";
+import { warn } from "console";
 
 export default function Home() {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  const myName = api.example.myNameIs.useMutation();
+  const [name, setName] = useState("");
+
+  console.log(name);
+  const submitName = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    myName.mutate({ name });
+  };
+
+  console.log("data", myName.data);
+  console.log("loading", myName.isLoading);
 
   return (
     <>
@@ -46,6 +59,15 @@ export default function Home() {
           <p className={styles.showcaseText}>
             {hello.data ? hello.data.greeting : "Loading tRPC query..."}
           </p>
+          {!myName.data && !myName.isLoading ? (
+            <form onSubmit={(e) => submitName(e)}>
+              <input className={styles.input} placeholder="Who is there?" value={name} onChange={(e) => setName(e.target.value)} />
+            </form>
+          ) : (
+            <p className={styles.showcaseText}>
+              {myName.isLoading ? "...Loading..." : myName.data.greeting}
+            </p>
+          )}
         </div>
       </main>
     </>
